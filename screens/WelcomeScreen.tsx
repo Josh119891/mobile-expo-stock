@@ -1,29 +1,73 @@
 import { SafeAreaView, StyleSheet, View, Text, TextInput, Pressable } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Entypo, SimpleLineIcons } from '@expo/vector-icons';
 import { ScreenTitle } from '../components/StyledText';
 import { RoundIcon } from '../components/StyledImage';
 import algoliasearch from 'algoliasearch';
 import { pick } from '../utils/pick';
-import { Stock } from '../types';
+import { RootStackScreenProps, Stock } from '../types';
 
 // @ts-ignore
 import { ALGOLIA_AID, ALGOLIA_KEY, ALGOLIA_INDEX } from '@env';
+import { db } from '../database/firebase';
+import { stocks } from '../database/mock';
 const client = algoliasearch(ALGOLIA_AID, ALGOLIA_KEY);
 const index = client.initIndex(ALGOLIA_INDEX);
 
-const WelcomeScreen = () => {
+const WelcomeScreen = ({ route }: RootStackScreenProps<'Welcome'>) => {
   const [showBoard, setShowBoard] = useState(true);
   const [searchText, setSearchText] = useState('');
   const [list, setList] = useState<Stock[]>([]);
+  const [temp, setTemp] = useState<Stock[]>([]);
+  const { uid } = route.params;
+  const docRef = db.collection('users').doc(uid);
+
   useEffect(() => {
+    (async () => {
+      // 如果该用户已经有关注的股票，在这里读取并写入list
+
+      const doc = await docRef.get();
+      if (doc.exists && doc.data()) {
+        setList(doc.data()?.stocks as Stock[]);
+        setTemp(doc.data()?.stocks as Stock[]);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (!searchText.length) {
+      setTemp(list);
+      return;
+    }
     index.search(searchText).then(({ hits }) => {
-      const stocks = hits.map((i) => ({ ...pick(i as any, ['objectID', 'title', 'symbol', 'uri']), follow: false }));
-      setList(stocks);
+      const stocks = [];
+      for (let hit of hits) {
+        for (let item of temp) {
+          if (item.title === (hit as any).title) stocks.push(item);
+        }
+      }
+      console.log(searchText, stocks);
+
+      setTemp(stocks);
     });
   }, [searchText]);
-  const onSubmit = () => {
-    //Todo
+
+  const onSubmit = async () => {
+    try {
+      // 把当前页面的更改，写入list里面，在一次更新到线上
+      const stocks = [...list];
+      for (let changed of temp) {
+        for (let i = 0; i < stocks.length; i++) {
+          if (stocks[i].title === changed.title) {
+            stocks[i] = { ...stocks[i], follow: changed.follow };
+          }
+        }
+      }
+      await docRef.set({ stocks });
+    } catch (error: any) {
+      alert(error.message);
+      console.log(error.message);
+    }
   };
   const Board = () => {
     return (
@@ -51,19 +95,19 @@ const WelcomeScreen = () => {
     <SafeAreaView style={styles.container}>
       {showBoard ? <Board /> : null}
       <View style={styles.cardGrid}>
-        {list.map((item, index) => (
+        {temp.map((item, index) => (
           <View key={item.objectID} style={styles.card}>
             <RoundIcon source={{ uri: item.uri }} />
             <Text style={{ fontWeight: 'bold' }}> {item.title}</Text>
             <Pressable
               onPress={() => {
-                const temp = [...list];
-                temp[index] = { ...item, follow: !item.follow };
-                setList(temp);
+                const newTemp = [...temp];
+                newTemp[index] = { ...item, follow: !item.follow };
+                setTemp(newTemp);
               }}
               style={item.follow ? styles.followBtn : styles.unfollowBtn}
             >
-              <Text style={item.follow ? styles.followText : styles.unfollowText}>Submit</Text>
+              <Text style={item.follow ? styles.followText : styles.unfollowText}>follow</Text>
             </Pressable>
           </View>
         ))}

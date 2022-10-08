@@ -1,7 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, KeyboardAvoidingView, TextInput, Text, Platform, TouchableWithoutFeedback, Button, Keyboard, Pressable } from 'react-native';
 import { styles } from './shared';
 import { RootStackScreenProps } from '../../types';
+import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
+import { PhoneAuthProvider, onAuthStateChanged, signInWithCredential, signInWithPhoneNumber } from 'firebase/auth';
+import { auth, firebaseConfig } from '../../database/firebase';
 
 const CONSTANTS = {
   TITLE: 'Sign Up !',
@@ -17,13 +20,32 @@ const RegisterScreen = ({ navigation }: RootStackScreenProps<'Register'>) => {
   const recaptchaVerifier = useRef<any>(null);
   const { TITLE, INPUT_TEXT, HELPER_TEXT, HELPER_BTN, MAIN_BTN } = CONSTANTS;
   const onSubmit = async () => {
-    //FIREBASE
-
-    //NAVIGATE
-    navigation.navigate('Otp', { TITLE, MAIN_BTN: 'Register' });
+    try {
+      //FIREBASE
+      const phoneProvider = new PhoneAuthProvider(auth);
+      const verificationId = await phoneProvider.verifyPhoneNumber(phone, recaptchaVerifier.current);
+      setVerificationId(verificationId);
+      console.log(verificationId);
+      //NAVIGATE
+      navigation.navigate('Otp', { TITLE, MAIN_BTN: 'Register', verificationId });
+    } catch (error: any) {
+      alert(error.message);
+    }
   };
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        console.log(JSON.stringify(currentUser, null, 2));
+        navigation.navigate('Welcome', { uid: currentUser.uid });
+      }
+    });
+    return unsubscribe;
+  }, [navigation]);
+
   return (
     <KeyboardAvoidingView enabled style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <FirebaseRecaptchaVerifierModal ref={recaptchaVerifier} firebaseConfig={firebaseConfig} attemptInvisibleVerification={true} />
+
       <View style={styles.red}></View>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.inner}>

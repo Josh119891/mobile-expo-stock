@@ -2,6 +2,9 @@ import React, { useState, useRef } from 'react';
 import { View, KeyboardAvoidingView, TextInput, Text, Platform, TouchableWithoutFeedback, Button, Keyboard, Pressable } from 'react-native';
 import { styles } from './shared';
 import { RootStackScreenProps } from '../../types';
+import { signInWithCredential, signInWithPhoneNumber } from 'firebase/auth';
+import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
+import { auth, firebaseConfig } from '../../database/firebase';
 
 const CONSTANTS = {
   TITLE: 'Sign In !',
@@ -18,12 +21,13 @@ const LoginScreen = ({ navigation }: RootStackScreenProps<'Login'>) => {
   const { TITLE, INPUT_TEXT, HELPER_TEXT, HELPER_BTN, MAIN_BTN } = CONSTANTS;
   const onSubmit = async () => {
     //FIREBASE
-
+    const confirmationResult = await signInWithPhoneNumber(auth, phone, recaptchaVerifier.current);
     //NAVIGATE
-    navigation.navigate('Otp', { TITLE, MAIN_BTN: 'Login' });
+    navigation.navigate('Otp', { TITLE, MAIN_BTN: 'Login', confirmationResult, verificationId });
   };
   return (
     <KeyboardAvoidingView enabled style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <FirebaseRecaptchaVerifierModal ref={recaptchaVerifier} firebaseConfig={firebaseConfig} attemptInvisibleVerification={true} />
       <View style={styles.red}></View>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.inner}>

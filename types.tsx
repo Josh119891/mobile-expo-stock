@@ -20,12 +20,13 @@ export type RootStackParamList = {
   Register: undefined;
   Login: undefined;
   Otp: OtpParams;
+  Welcome: { uid: string };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<RootStackParamList, Screen>;
 
 export type RootTabParamList = {
-  TabOne: undefined;
+  TabOne: { uid: string }; // 用于获取当前用户的数据信息
   TabTwo: undefined;
 };
 
@@ -47,4 +48,4 @@ export interface AuthParams {
   MAIN_BTN: string;
 }
 
-export type OtpParams = AuthParams & {};
+export type OtpParams = AuthParams & { verificationId?: any; confirmationResult?: any };
