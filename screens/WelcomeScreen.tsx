@@ -1,30 +1,30 @@
 import { SafeAreaView, StyleSheet, View, Text, TextInput, Pressable } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { Entypo, SimpleLineIcons, Ionicons } from '@expo/vector-icons';
+import { Entypo, SimpleLineIcons } from '@expo/vector-icons';
 import { ScreenTitle } from '../components/StyledText';
-
 import { RoundIcon } from '../components/StyledImage';
-import { stocks } from '../constants/Stocks';
-
 import algoliasearch from 'algoliasearch';
+import { pick } from '../utils/pick';
+import { Stock } from '../types';
+
 // @ts-ignore
 import { ALGOLIA_AID, ALGOLIA_KEY, ALGOLIA_INDEX } from '@env';
-import { pick } from '../utils/pick';
-
 const client = algoliasearch(ALGOLIA_AID, ALGOLIA_KEY);
 const index = client.initIndex(ALGOLIA_INDEX);
 
 const WelcomeScreen = () => {
   const [showBoard, setShowBoard] = useState(true);
   const [searchText, setSearchText] = useState('');
-  const [list, setList] = useState([]);
+  const [list, setList] = useState<Stock[]>([]);
   useEffect(() => {
     index.search(searchText).then(({ hits }) => {
-      const stocks = hits.map((i) => pick(i as any, ['objectID', 'title', 'symbol', 'uri']));
+      const stocks = hits.map((i) => ({ ...pick(i as any, ['objectID', 'title', 'symbol', 'uri']), follow: false }));
       setList(stocks);
     });
   }, [searchText]);
-
+  const onSubmit = () => {
+    //Todo
+  };
   const Board = () => {
     return (
       <View style={styles.board}>
@@ -52,7 +52,7 @@ const WelcomeScreen = () => {
       {showBoard ? <Board /> : null}
       <View style={styles.cardGrid}>
         {list.map((item, index) => (
-          <View key={item.title} style={styles.card}>
+          <View key={item.objectID} style={styles.card}>
             <RoundIcon source={{ uri: item.uri }} />
             <Text style={{ fontWeight: 'bold' }}> {item.title}</Text>
             <Pressable
@@ -69,16 +69,7 @@ const WelcomeScreen = () => {
         ))}
       </View>
       <View style={styles.submitView}>
-        <Pressable
-          disabled={list.every((i) => i.follow === false)}
-          onPress={() => {
-            console.log(
-              list.every((i) => i.follow !== false),
-              list
-            );
-          }}
-          style={styles.submitBtn}
-        >
+        <Pressable onPress={onSubmit} style={styles.submitBtn}>
           <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Add to watch list</Text>
         </Pressable>
       </View>
