@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     maxWidth: '80%',
   },
   cardGrid: {
-    zIndex: 'auto',
+    zIndex: 1,
     position: 'relative',
 
     flex: 1,

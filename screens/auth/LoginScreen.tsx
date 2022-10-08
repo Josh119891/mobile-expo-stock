@@ -4,14 +4,14 @@ import { styles } from './shared';
 import { RootStackScreenProps } from '../../types';
 
 const CONSTANTS = {
-  TITLE: 'Sign Up !',
+  TITLE: 'Sign In !',
   INPUT_TEXT: 'Enter Mobile Number',
-  HELPER_TEXT: 'Already have an account ?',
-  HELPER_BTN: 'Sign In',
+  HELPER_TEXT: 'Dont have an account ?',
+  HELPER_BTN: 'Sign Up',
   MAIN_BTN: 'Submit',
 };
 
-const RegisterScreen = ({ navigation }: RootStackScreenProps<'Register'>) => {
+const LoginScreen = ({ navigation }: RootStackScreenProps<'Login'>) => {
   const [phone, setPhone] = useState('+86');
   const [verificationId, setVerificationId] = useState('');
   const recaptchaVerifier = useRef<any>(null);
@@ -20,7 +20,7 @@ const RegisterScreen = ({ navigation }: RootStackScreenProps<'Register'>) => {
     //FIREBASE
 
     //NAVIGATE
-    navigation.navigate('Otp', { TITLE, MAIN_BTN: 'Register' });
+    navigation.navigate('Otp', { TITLE, MAIN_BTN: 'Login' });
   };
   return (
     <KeyboardAvoidingView enabled style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -34,7 +34,7 @@ const RegisterScreen = ({ navigation }: RootStackScreenProps<'Register'>) => {
           </View>
           <View style={styles.helperBox}>
             <Text style={styles.helperTitle}>{HELPER_TEXT}</Text>
-            <Button onPress={() => navigation.navigate('Login')} title={HELPER_BTN} />
+            <Button onPress={() => navigation.navigate('Register')} title={HELPER_BTN} />
           </View>
 
           <Pressable onPress={onSubmit} style={styles.submitBtn}>
@@ -46,4 +46,4 @@ const RegisterScreen = ({ navigation }: RootStackScreenProps<'Register'>) => {
   );
 };
 
-export default RegisterScreen;
+export default LoginScreen;

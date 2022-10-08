@@ -18,6 +18,8 @@ export type RootStackParamList = {
   Modal: undefined;
   NotFound: undefined;
   Register: undefined;
+  Login: undefined;
+  Otp: OtpParams;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<RootStackParamList, Screen>;
@@ -39,3 +41,10 @@ export interface Stock {
   uri: string;
   follow: boolean;
 }
+
+export interface AuthParams {
+  TITLE: string;
+  MAIN_BTN: string;
+}
+
+export type OtpParams = AuthParams & {};
