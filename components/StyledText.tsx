@@ -1,5 +1,5 @@
 import { Text, TextProps } from './Themed';
 
-export function MonoText(props: TextProps) {
-  return <Text {...props} style={[props.style, { fontFamily: 'space-mono' }]} />;
+export function ScreenTitle(props: TextProps) {
+  return <Text {...props} style={[{ fontWeight: 'bold', fontSize: 32 }, props.style]} />;
 }

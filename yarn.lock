@@ -2,6 +2,110 @@
 # yarn lockfile v1
 
 
+"@algolia/cache-browser-local-storage@4.14.2":
+  version "4.14.2"
+  resolved "https://registry.yarnpkg.com/@algolia/cache-browser-local-storage/-/cache-browser-local-storage-4.14.2.tgz#d5b1b90130ca87c6321de876e167df9ec6524936"
+  integrity sha512-FRweBkK/ywO+GKYfAWbrepewQsPTIEirhi1BdykX9mxvBPtGNKccYAxvGdDCumU1jL4r3cayio4psfzKMejBlA==
+  dependencies:
+    "@algolia/cache-common" "4.14.2"
+
+"@algolia/cache-common@4.14.2":
+  version "4.14.2"
+  resolved "https://registry.yarnpkg.com/@algolia/cache-common/-/cache-common-4.14.2.tgz#b946b6103c922f0c06006fb6929163ed2c67d598"
+  integrity sha512-SbvAlG9VqNanCErr44q6lEKD2qoK4XtFNx9Qn8FK26ePCI8I9yU7pYB+eM/cZdS9SzQCRJBbHUumVr4bsQ4uxg==
+
+"@algolia/cache-in-memory@4.14.2":
+  version "4.14.2"
+  resolved "https://registry.yarnpkg.com/@algolia/cache-in-memory/-/cache-in-memory-4.14.2.tgz#88e4a21474f9ac05331c2fa3ceb929684a395a24"
+  integrity sha512-HrOukWoop9XB/VFojPv1R5SVXowgI56T9pmezd/djh2JnVN/vXswhXV51RKy4nCpqxyHt/aGFSq2qkDvj6KiuQ==
+  dependencies:
+    "@algolia/cache-common" "4.14.2"
+
+"@algolia/client-account@4.14.2":
+  version "4.14.2"
+  resolved "https://registry.yarnpkg.com/@algolia/client-account/-/client-account-4.14.2.tgz#b76ac1ba9ea71e8c3f77a1805b48350dc0728a16"
+  integrity sha512-WHtriQqGyibbb/Rx71YY43T0cXqyelEU0lB2QMBRXvD2X0iyeGl4qMxocgEIcbHyK7uqE7hKgjT8aBrHqhgc1w==
+  dependencies:
+    "@algolia/client-common" "4.14.2"
+    "@algolia/client-search" "4.14.2"
+    "@algolia/transporter" "4.14.2"
+
+"@algolia/client-analytics@4.14.2":
+  version "4.14.2"
+  resolved "https://registry.yarnpkg.com/@algolia/client-analytics/-/client-analytics-4.14.2.tgz#ca04dcaf9a78ee5c92c5cb5e9c74cf031eb2f1fb"
+  integrity sha512-yBvBv2mw+HX5a+aeR0dkvUbFZsiC4FKSnfqk9rrfX+QrlNOKEhCG0tJzjiOggRW4EcNqRmaTULIYvIzQVL2KYQ==
+  dependencies:
+    "@algolia/client-common" "4.14.2"
+    "@algolia/client-search" "4.14.2"
+    "@algolia/requester-common" "4.14.2"
+    "@algolia/transporter" "4.14.2"
+
+"@algolia/client-common@4.14.2":
+  version "4.14.2"
+  resolved "https://registry.yarnpkg.com/@algolia/client-common/-/client-common-4.14.2.tgz#e1324e167ffa8af60f3e8bcd122110fd0bfd1300"
+  integrity sha512-43o4fslNLcktgtDMVaT5XwlzsDPzlqvqesRi4MjQz2x4/Sxm7zYg5LRYFol1BIhG6EwxKvSUq8HcC/KxJu3J0Q==
+  dependencies:
+    "@algolia/requester-common" "4.14.2"
+    "@algolia/transporter" "4.14.2"
+
+"@algolia/client-personalization@4.14.2":
+  version "4.14.2"
+  resolved "https://registry.yarnpkg.com/@algolia/client-personalization/-/client-personalization-4.14.2.tgz#656bbb6157a3dd1a4be7de65e457fda136c404ec"
+  integrity sha512-ACCoLi0cL8CBZ1W/2juehSltrw2iqsQBnfiu/Rbl9W2yE6o2ZUb97+sqN/jBqYNQBS+o0ekTMKNkQjHHAcEXNw==
+  dependencies:
+    "@algolia/client-common" "4.14.2"
+    "@algolia/requester-common" "4.14.2"
+    "@algolia/transporter" "4.14.2"
+
+"@algolia/client-search@4.14.2":
+  version "4.14.2"
+  resolved "https://registry.yarnpkg.com/@algolia/client-search/-/client-search-4.14.2.tgz#357bdb7e640163f0e33bad231dfcc21f67dc2e92"
+  integrity sha512-L5zScdOmcZ6NGiVbLKTvP02UbxZ0njd5Vq9nJAmPFtjffUSOGEp11BmD2oMJ5QvARgx2XbX4KzTTNS5ECYIMWw==
+  dependencies:
+    "@algolia/client-common" "4.14.2"
+    "@algolia/requester-common" "4.14.2"
+    "@algolia/transporter" "4.14.2"
+
+"@algolia/logger-common@4.14.2":
+  version "4.14.2"
+  resolved "https://registry.yarnpkg.com/@algolia/logger-common/-/logger-common-4.14.2.tgz#b74b3a92431f92665519d95942c246793ec390ee"
+  integrity sha512-/JGlYvdV++IcMHBnVFsqEisTiOeEr6cUJtpjz8zc0A9c31JrtLm318Njc72p14Pnkw3A/5lHHh+QxpJ6WFTmsA==
+
+"@algolia/logger-console@4.14.2":
+  version "4.14.2"
+  resolved "https://registry.yarnpkg.com/@algolia/logger-console/-/logger-console-4.14.2.tgz#ec49cb47408f5811d4792598683923a800abce7b"
+  integrity sha512-8S2PlpdshbkwlLCSAB5f8c91xyc84VM9Ar9EdfE9UmX+NrKNYnWR1maXXVDQQoto07G1Ol/tYFnFVhUZq0xV/g==
+  dependencies:
+    "@algolia/logger-common" "4.14.2"
+
+"@algolia/requester-browser-xhr@4.14.2":
+  version "4.14.2"
+  resolved "https://registry.yarnpkg.com/@algolia/requester-browser-xhr/-/requester-browser-xhr-4.14.2.tgz#a2cd4d9d8d90d53109cc7f3682dc6ebf20f798f2"
+  integrity sha512-CEh//xYz/WfxHFh7pcMjQNWgpl4wFB85lUMRyVwaDPibNzQRVcV33YS+63fShFWc2+42YEipFGH2iPzlpszmDw==
+  dependencies:
+    "@algolia/requester-common" "4.14.2"
+
+"@algolia/requester-common@4.14.2":
+  version "4.14.2"
+  resolved "https://registry.yarnpkg.com/@algolia/requester-common/-/requester-common-4.14.2.tgz#bc4e9e5ee16c953c0ecacbfb334a33c30c28b1a1"
+  integrity sha512-73YQsBOKa5fvVV3My7iZHu1sUqmjjfs9TteFWwPwDmnad7T0VTCopttcsM3OjLxZFtBnX61Xxl2T2gmG2O4ehg==
+
+"@algolia/requester-node-http@4.14.2":
+  version "4.14.2"
+  resolved "https://registry.yarnpkg.com/@algolia/requester-node-http/-/requester-node-http-4.14.2.tgz#7c1223a1785decaab1def64c83dade6bea45e115"
+  integrity sha512-oDbb02kd1o5GTEld4pETlPZLY0e+gOSWjWMJHWTgDXbv9rm/o2cF7japO6Vj1ENnrqWvLBmW1OzV9g6FUFhFXg==
+  dependencies:
+    "@algolia/requester-common" "4.14.2"
+
+"@algolia/transporter@4.14.2":
+  version "4.14.2"
+  resolved "https://registry.yarnpkg.com/@algolia/transporter/-/transporter-4.14.2.tgz#77c069047fb1a4359ee6a51f51829508e44a1e3d"
+  integrity sha512-t89dfQb2T9MFQHidjHcfhh6iGMNwvuKUvojAj+JsrHAGbuSy7yE4BylhLX6R0Q1xYRoC4Vvv+O5qIw/LdnQfsQ==
+  dependencies:
+    "@algolia/cache-common" "4.14.2"
+    "@algolia/logger-common" "4.14.2"
+    "@algolia/requester-common" "4.14.2"
+
 "@ampproject/remapping@^2.1.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@ampproject/remapping/-/remapping-2.2.0.tgz#56c133824780de3174aed5ab6834f3026790154d"
@@ -2273,6 +2377,26 @@ aggregate-error@^3.0.0:
     clean-stack "^2.0.0"
     indent-string "^4.0.0"
 
+algoliasearch@^4.14.2:
+  version "4.14.2"
+  resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-4.14.2.tgz#63f142583bfc3a9bd3cd4a1b098bf6fe58e56f6c"
+  integrity sha512-ngbEQonGEmf8dyEh5f+uOIihv4176dgbuOZspiuhmTTBRBuzWu3KCGHre6uHj5YyuC7pNvQGzB6ZNJyZi0z+Sg==
+  dependencies:
+    "@algolia/cache-browser-local-storage" "4.14.2"
+    "@algolia/cache-common" "4.14.2"
+    "@algolia/cache-in-memory" "4.14.2"
+    "@algolia/client-account" "4.14.2"
+    "@algolia/client-analytics" "4.14.2"
+    "@algolia/client-common" "4.14.2"
+    "@algolia/client-personalization" "4.14.2"
+    "@algolia/client-search" "4.14.2"
+    "@algolia/logger-common" "4.14.2"
+    "@algolia/logger-console" "4.14.2"
+    "@algolia/requester-browser-xhr" "4.14.2"
+    "@algolia/requester-common" "4.14.2"
+    "@algolia/requester-node-http" "4.14.2"
+    "@algolia/transporter" "4.14.2"
+
 anser@^1.4.9:
   version "1.4.10"
   resolved "https://registry.yarnpkg.com/anser/-/anser-1.4.10.tgz#befa3eddf282684bd03b63dcda3927aef8c2e35b"
@@ -3474,6 +3598,11 @@ domexception@^2.0.1:
   integrity sha512-yxJ2mFy/sibVQlu5qHjOkf9J3K6zgmCxgJ94u2EdvDOV09H+32LtRswEcUsmUWN72pVLOEnTSRaIVVzVQgS0dg==
   dependencies:
     webidl-conversions "^5.0.0"
+
+dotenv@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-10.0.0.tgz#3d4227b8fb95f81096cdd2b66653fb2c7085ba81"
+  integrity sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==
 
 ee-first@1.1.1:
   version "1.1.1"
@@ -5817,6 +5946,50 @@ metro-react-native-babel-preset@0.70.3, metro-react-native-babel-preset@~0.70.3:
     "@babel/template" "^7.0.0"
     react-refresh "^0.4.0"
 
+metro-react-native-babel-preset@^0.73.1:
+  version "0.73.1"
+  resolved "https://registry.yarnpkg.com/metro-react-native-babel-preset/-/metro-react-native-babel-preset-0.73.1.tgz#a7183a572032b664a08bfa50de048549d110a031"
+  integrity sha512-yKWtM25PFoMGOumqfgqVbCwhfTm65yfTQLnesdvG6cjDn3MhaFF0wWkha2rWaT2HhJPYeO3qLER16C/CBAitcw==
+  dependencies:
+    "@babel/core" "^7.14.0"
+    "@babel/plugin-proposal-async-generator-functions" "^7.0.0"
+    "@babel/plugin-proposal-class-properties" "^7.0.0"
+    "@babel/plugin-proposal-export-default-from" "^7.0.0"
+    "@babel/plugin-proposal-nullish-coalescing-operator" "^7.0.0"
+    "@babel/plugin-proposal-object-rest-spread" "^7.0.0"
+    "@babel/plugin-proposal-optional-catch-binding" "^7.0.0"
+    "@babel/plugin-proposal-optional-chaining" "^7.0.0"
+    "@babel/plugin-syntax-dynamic-import" "^7.0.0"
+    "@babel/plugin-syntax-export-default-from" "^7.0.0"
+    "@babel/plugin-syntax-flow" "^7.2.0"
+    "@babel/plugin-syntax-nullish-coalescing-operator" "^7.0.0"
+    "@babel/plugin-syntax-optional-chaining" "^7.0.0"
+    "@babel/plugin-transform-arrow-functions" "^7.0.0"
+    "@babel/plugin-transform-async-to-generator" "^7.0.0"
+    "@babel/plugin-transform-block-scoping" "^7.0.0"
+    "@babel/plugin-transform-classes" "^7.0.0"
+    "@babel/plugin-transform-computed-properties" "^7.0.0"
+    "@babel/plugin-transform-destructuring" "^7.0.0"
+    "@babel/plugin-transform-flow-strip-types" "^7.0.0"
+    "@babel/plugin-transform-function-name" "^7.0.0"
+    "@babel/plugin-transform-literals" "^7.0.0"
+    "@babel/plugin-transform-modules-commonjs" "^7.0.0"
+    "@babel/plugin-transform-named-capturing-groups-regex" "^7.0.0"
+    "@babel/plugin-transform-parameters" "^7.0.0"
+    "@babel/plugin-transform-react-display-name" "^7.0.0"
+    "@babel/plugin-transform-react-jsx" "^7.0.0"
+    "@babel/plugin-transform-react-jsx-self" "^7.0.0"
+    "@babel/plugin-transform-react-jsx-source" "^7.0.0"
+    "@babel/plugin-transform-runtime" "^7.0.0"
+    "@babel/plugin-transform-shorthand-properties" "^7.0.0"
+    "@babel/plugin-transform-spread" "^7.0.0"
+    "@babel/plugin-transform-sticky-regex" "^7.0.0"
+    "@babel/plugin-transform-template-literals" "^7.0.0"
+    "@babel/plugin-transform-typescript" "^7.5.0"
+    "@babel/plugin-transform-unicode-regex" "^7.0.0"
+    "@babel/template" "^7.0.0"
+    react-refresh "^0.4.0"
+
 metro-react-native-babel-transformer@0.70.3, metro-react-native-babel-transformer@^0.70.1:
   version "0.70.3"
   resolved "https://registry.yarnpkg.com/metro-react-native-babel-transformer/-/metro-react-native-babel-transformer-0.70.3.tgz#195597c32488f820aa9e441bbca7c04fe7de7a2d"
@@ -6881,6 +7054,13 @@ react-native-codegen@^0.69.2:
     flow-parser "^0.121.0"
     jscodeshift "^0.13.1"
     nullthrows "^1.1.1"
+
+react-native-dotenv@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-dotenv/-/react-native-dotenv-3.3.1.tgz#8f399cf28ca77d860d8e7f7323e439fa60a8ca0b"
+  integrity sha512-gAKXout1XCwCqJ3QPGoQAF2eRzOHgOnwg3x19z+ssow8bDIksJeKBqvoHDyGziVilAIP1J0bEC9Jf+VF8nFang==
+  dependencies:
+    dotenv "^10.0.0"
 
 react-native-gradle-plugin@^0.0.7:
   version "0.0.7"
