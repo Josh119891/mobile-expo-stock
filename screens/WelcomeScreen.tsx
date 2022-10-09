@@ -10,10 +10,11 @@ import { RootStackScreenProps, Stock } from '../types';
 // @ts-ignore
 import { ALGOLIA_AID, ALGOLIA_KEY, ALGOLIA_INDEX } from '@env';
 import { db } from '../database/firebase';
+import Navigation from '../navigation';
 const client = algoliasearch(ALGOLIA_AID, ALGOLIA_KEY);
 const index = client.initIndex(ALGOLIA_INDEX);
 
-const WelcomeScreen = ({ route }: RootStackScreenProps<'Welcome'>) => {
+const WelcomeScreen = ({ route, navigation }: RootStackScreenProps<'Welcome'>) => {
   const [showBoard, setShowBoard] = useState(true);
   const [searchText, setSearchText] = useState('');
   const [list, setList] = useState<Stock[]>([]);
@@ -62,6 +63,7 @@ const WelcomeScreen = ({ route }: RootStackScreenProps<'Welcome'>) => {
         }
       }
       await docRef.set({ stocks });
+      navigation.navigate('Root', { params: { uid }, screen: 'TabOne' });
     } catch (error: any) {
       alert(error.message);
       console.log(error.message);

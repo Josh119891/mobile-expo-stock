@@ -1,30 +1,23 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { QuoteObject, Stock } from '../types';
+import { QuoteObject, QuoteStock, Stock } from '../types';
 import { formatNum, getColor } from '../utils/numberic';
 import { quoteEndpoint } from '../utils/services';
 
 interface Props {
-  stock: Stock;
+  stock: QuoteStock;
 }
 const StockCard = ({ stock = {} }: Props) => {
   const { title, symbol, uri } = stock;
-  const [stockQuote, setStockQuote] = useState<QuoteObject>({} as QuoteObject);
-  useEffect(() => {
-    const init = async () => {
-      const quoteObj = await quoteEndpoint(symbol);
-      setStockQuote(quoteObj);
-    };
-    init();
-  }, []);
+
   return (
     <View style={styles.stockCard}>
       <Image style={{ height: 40, width: 40, borderRadius: 20, borderWidth: 0.2 }} source={{ uri }} />
       <Text style={{ fontSize: 18, fontWeight: 'bold', marginTop: 10 }}>{title}</Text>
-      <Text style={{ fontSize: 14, fontWeight: 'bold', marginTop: 10 }}>${formatNum(stockQuote['05. price'])}</Text>
+      <Text style={{ fontSize: 14, fontWeight: 'bold', marginTop: 10 }}>${formatNum(stock['05. price'])}</Text>
       <View style={[styles.row, { marginTop: 10 }]}>
-        <Text style={[styles.stockChip, { color: getColor(stockQuote['10. change percent']) }]}>{formatNum(stockQuote['10. change percent'])}</Text>
-        <Text style={styles.stockChip}>{formatNum(stockQuote['09. change'])}</Text>
+        <Text style={[styles.stockChip, { color: getColor(stock['10. change percent']) }]}>{formatNum(stock['10. change percent'])}</Text>
+        <Text style={styles.stockChip}>{formatNum(stock['09. change'])}</Text>
       </View>
     </View>
   );

@@ -1,27 +1,43 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
-import { RootTabScreenProps, QuoteObject, QuoteResponse, Stock } from '../types';
-import { SimpleLineIcons, AntDesign } from '@expo/vector-icons';
+import { RootTabScreenProps, QuoteStock, QuoteResponse, Stock } from '../types';
+import { SimpleLineIcons, AntDesign, Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useEffect, useState } from 'react';
-// import { quoteEndpoint } from '../services';
 import SeeAllBtn from '../components/SeeAllBtn';
 import StockCard from '../components/StockCard';
 import { db } from '../database/firebase';
+import { quoteEndpoint } from '../utils/services';
+import { formatNum, getColor } from '../utils/numberic';
+import { pick } from '../utils/pick';
 
+const STORE_KEYS = ['follow', 'title', 'uri', 'symbol'];
 export default function TabOneScreen({ navigation, route }: RootTabScreenProps<'TabOne'>) {
-  const [watchlist, setWatchlist] = useState<Stock[]>([]);
-  const [stocks, setStocks] = useState<Stock[]>([]);
+  const [watchlist, setWatchlist] = useState<Array<QuoteStock>>([]);
+  const [stocks, setStocks] = useState<Array<QuoteStock>>([]);
   const uid = route?.params?.uid || 'I3A20k33Lgdj6KdeCHYZCUkW9Pj2';
   const docRef = db.collection('users').doc(uid);
+
+  const unfollow = async (symbol: string) => {
+    const udpateData = stocks.reduce((pre, cur) => {
+      let temp = pick(cur, STORE_KEYS);
+      if (cur.symbol === symbol) {
+        Object.assign(temp, { follow: !cur.follow });
+      }
+      //@ts-ignore
+      pre.push(temp);
+      return pre;
+    }, []);
+    await docRef.set({ stocks: udpateData });
+  };
 
   useEffect(() => {
     const init = async () => {
       const doc = await docRef.get();
       if (doc.exists && doc.data()) {
         const storeData = (doc.data()?.stocks || []) as Stock[];
-
-        setStocks(storeData);
-        setWatchlist(storeData.filter((i) => i.follow));
+        const quotes = await Promise.all(storeData.map((i) => quoteEndpoint(i)));
+        setStocks(quotes);
+        setWatchlist(quotes.filter((i) => i.follow).slice(0, 3));
       }
     };
     init();
@@ -38,42 +54,41 @@ export default function TabOneScreen({ navigation, route }: RootTabScreenProps<'
         <SeeAllBtn />
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-around' }}>
-        <StockCard stock={stocks.find((i) => i.title === 'Tesla') as Stock} />
-        <StockCard stock={stocks.find((i) => i.title === 'GameStop') as Stock} />
+        <StockCard stock={stocks.find((i) => i.title === 'Tesla') as QuoteStock} />
+        <StockCard stock={stocks.find((i) => i.title === 'GameStop') as QuoteStock} />
       </View>
       <View style={[styles.separator, { backgroundColor: '#eee' }]} />
       <View style={[styles.row, { paddingHorizontal: 20 }]}>
         <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Your watchlist</Text>
-        <SeeAllBtn />
+        <SeeAllBtn onPress={() => navigation.navigate('Welcome', { uid })} />
       </View>
       <View>
-        {/* {list.map((i, index) => (
-            <View
-              key={i["01. symbol"] || index}
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-around",
-                marginHorizontal: 15,
-                height: 80,
-                width: "90%",
-                borderColor: "grey",
-                borderWidth: 0.5,
-                borderRadius: 15,
-                marginTop: 10,
-                paddingHorizontal: 15,
-              }}
-            >
-              <AntDesign name="star" size={30} color="orange" />
-              <Text>{i.title || "title"}</Text>
-              <View style={{ flexDirection: "column" }}>
-                <Text>{i["01. symbol"] || "title"}</Text>
-
-                <Text style={{ color: parseInt(i["10. change percent"], 10) > 0 ? "green" : "red" }}>{i["10. change percent"] || "123"}</Text>
-              </View>
-              <Text>{i["05. price"] || "123"}</Text>
+        {watchlist.map((i, index) => (
+          <View
+            key={i['01. symbol'] || index}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-around',
+              marginHorizontal: 15,
+              height: 80,
+              width: '90%',
+              borderColor: 'grey',
+              borderWidth: 0.5,
+              borderRadius: 15,
+              marginTop: 10,
+              paddingHorizontal: 15,
+            }}
+          >
+            <AntDesign name="star" size={30} color="orange" onPress={() => unfollow(i.symbol)} />
+            <View style={{ flexDirection: 'column' }}>
+              <Text>{i.title}</Text>
+              <Text style={{ color: getColor(i['10. change percent']) }}>{formatNum(i['10. change percent'])}</Text>
             </View>
-          ))} */}
+            <Text>${formatNum(i['05. price'])}</Text>
+            <Feather name="more-vertical" size={24} color="black" />
+          </View>
+        ))}
       </View>
     </SafeAreaView>
   );
@@ -82,6 +97,7 @@ export default function TabOneScreen({ navigation, route }: RootTabScreenProps<'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#eff5f9',
   },
   topCard: {
     padding: 20,

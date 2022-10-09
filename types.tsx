@@ -65,3 +65,4 @@ export interface QuoteObject {
 export interface QuoteResponse {
   'Global Quote': QuoteObject;
 }
+export type QuoteStock = QuoteObject & Stock;
