@@ -19,6 +19,7 @@
     "@react-navigation/native-stack": "^6.1.0",
     "algoliasearch": "^4.14.2",
     "axios": "^1.1.2",
+    "echarts-for-react-native": "^1.1.7",
     "expo": "~46.0.13",
     "expo-asset": "~8.6.1",
     "expo-constants": "~13.2.4",
