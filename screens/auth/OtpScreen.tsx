@@ -4,7 +4,7 @@ import { styles } from './shared';
 import { RootStackScreenProps } from '../../types';
 import { PhoneAuthProvider, signInWithCredential } from 'firebase/auth';
 import { auth } from '../../database/firebase';
-import { AppContext } from '../../App';
+import { AppContext } from '../../context';
 
 const CONSTANTS = {
   INPUT_TEXT: 'Enter OTP',
@@ -21,7 +21,6 @@ const OtpScreen = ({ navigation, route }: RootStackScreenProps<'Otp'>) => {
     try {
       const credential = PhoneAuthProvider.credential(verificationId, code);
       const { user } = await signInWithCredential(auth, credential);
-      console.log(user);
       // pass uid into Welcome screen
       dispatch({ type: 'set', payload: { uid: (user as any).uid } });
       navigation.navigate('Welcome');

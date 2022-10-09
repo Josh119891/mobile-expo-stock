@@ -9,26 +9,30 @@ import { db } from '../database/firebase';
 import { quoteEndpoint } from '../utils/services';
 import { formatNum, getColor } from '../utils/numberic';
 import { pick } from '../utils/pick';
-import { AppContext } from '../App';
+import { AppContext } from '../context';
+import { useIsFocused } from '@react-navigation/native';
 
 const STORE_KEYS = ['follow', 'title', 'uri', 'symbol'];
 export default function TabOneScreen({ navigation, route }: RootTabScreenProps<'TabOne'>) {
   const [watchlist, setWatchlist] = useState<Array<QuoteStock>>([]);
-  const [stocks, setStocks] = useState<Array<QuoteStock>>([]);
-  const [{ uid }] = useContext(AppContext);
-  const docRef = db.collection('users').doc(uid);
+  const [teslaStock, setTeslaStock] = useState<QuoteStock>({} as QuoteStock);
+  const [gmsStock, setGmsStock] = useState<QuoteStock>({} as QuoteStock);
+
+  const [state, dispatch] = useContext(AppContext);
+  const docRef = db.collection('users').doc(state.uid);
+  const isFocused = useIsFocused();
 
   const unfollow = async (symbol: string) => {
-    const udpateData = stocks.reduce((pre, cur) => {
-      let temp = pick(cur, STORE_KEYS);
-      if (cur.symbol === symbol) {
-        Object.assign(temp, { follow: !cur.follow });
-      }
-      //@ts-ignore
-      pre.push(temp);
-      return pre;
-    }, []);
-    await docRef.set({ stocks: udpateData });
+    let followList = watchlist.filter((i) => i.symbol !== symbol && i.follow).slice(0, 3);
+
+    setWatchlist(followList);
+
+    const doc = await docRef.get();
+    if (doc.exists && doc.data()) {
+      const storeData = (doc.data()?.stocks || []) as Stock[];
+      const updatedResult = storeData.map((i) => ({ ...i, follow: i.symbol === symbol ? false : i.follow }));
+      await docRef.set({ stocks: updatedResult });
+    }
   };
 
   useEffect(() => {
@@ -37,12 +41,13 @@ export default function TabOneScreen({ navigation, route }: RootTabScreenProps<'
       if (doc.exists && doc.data()) {
         const storeData = (doc.data()?.stocks || []) as Stock[];
         const quotes = await Promise.all(storeData.map((i) => quoteEndpoint(i)));
-        setStocks(quotes);
+        setTeslaStock(quotes.find((i) => i.title === 'Tesla') as QuoteStock);
+        setGmsStock(quotes.find((i) => i.title === 'GameStop') as QuoteStock);
         setWatchlist(quotes.filter((i) => i.follow).slice(0, 3));
       }
     };
     init();
-  }, []);
+  }, [isFocused]);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topCard}>
@@ -55,8 +60,8 @@ export default function TabOneScreen({ navigation, route }: RootTabScreenProps<'
         <SeeAllBtn />
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-around' }}>
-        <StockCard stock={stocks.find((i) => i.title === 'Tesla') as QuoteStock} />
-        <StockCard stock={stocks.find((i) => i.title === 'GameStop') as QuoteStock} />
+        <StockCard stock={teslaStock} onPressFunc={() => navigation.navigate('StockChart', { symbol: teslaStock.symbol })} />
+        <StockCard stock={gmsStock} onPressFunc={() => navigation.navigate('StockChart', { symbol: gmsStock.symbol })} />
       </View>
       <View style={[styles.separator, { backgroundColor: '#eee' }]} />
       <View style={[styles.row, { paddingHorizontal: 20 }]}>

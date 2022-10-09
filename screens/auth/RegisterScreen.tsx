@@ -1,10 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { View, KeyboardAvoidingView, TextInput, Text, Platform, TouchableWithoutFeedback, Button, Keyboard, Pressable } from 'react-native';
 import { styles } from './shared';
 import { RootStackScreenProps } from '../../types';
 import { FirebaseRecaptchaVerifierModal } from 'expo-firebase-recaptcha';
 import { PhoneAuthProvider, onAuthStateChanged, signInWithCredential, signInWithPhoneNumber } from 'firebase/auth';
 import { auth, firebaseConfig } from '../../database/firebase';
+import { AppContext } from '../../context';
 
 const CONSTANTS = {
   TITLE: 'Sign Up !',
@@ -18,6 +19,7 @@ const RegisterScreen = ({ navigation }: RootStackScreenProps<'Register'>) => {
   const [phone, setPhone] = useState('+86');
   const [verificationId, setVerificationId] = useState('');
   const recaptchaVerifier = useRef<any>(null);
+  const [state, dispatch] = useContext(AppContext);
   const { TITLE, INPUT_TEXT, HELPER_TEXT, HELPER_BTN, MAIN_BTN } = CONSTANTS;
   const onSubmit = async () => {
     try {
@@ -34,7 +36,8 @@ const RegisterScreen = ({ navigation }: RootStackScreenProps<'Register'>) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
-        navigation.navigate('Welcome');
+        dispatch({ type: 'set', payload: { ...state, uid: currentUser.uid } });
+        navigation.replace('Root', { screen: 'TabOne' });
       }
     });
     return unsubscribe;

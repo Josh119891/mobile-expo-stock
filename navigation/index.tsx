@@ -49,7 +49,7 @@ function RootNavigator() {
       <Stack.Screen name="Register" component={RegisterScreen} options={authOptions} />
       <Stack.Screen name="Login" component={LoginScreen} options={authOptions} />
       <Stack.Screen name="Otp" component={OtpScreen} options={authOptions} />
-      <Stack.Screen name="StockChart" component={StockChart} options={{ headerTitle: '' }} />
+      <Stack.Screen name="StockChart" component={StockChart} />
 
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />

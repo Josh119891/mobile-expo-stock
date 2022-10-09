@@ -6,8 +6,8 @@ import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import { useReducer, useContext, createContext } from 'react';
 import { StateType } from './types';
+import { AppContext } from './context';
 
-export const AppContext = createContext<any>({});
 function reducer(state: StateType, action: { type: string; payload: StateType }) {
   switch (action.type) {
     case 'set':

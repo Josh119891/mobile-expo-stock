@@ -21,7 +21,7 @@ export type RootStackParamList = {
   Login: undefined;
   Otp: OtpParams;
   Welcome: undefined;
-  StockChart: undefined;
+  StockChart: { symbol: string };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<RootStackParamList, Screen>;
@@ -71,3 +71,14 @@ export type QuoteStock = QuoteObject & Stock;
 export interface StateType {
   uid?: string;
 }
+
+export type ChartResponse = Record<
+  string,
+  {
+    '1. open': string;
+    '2. high': string;
+    '3. low': string;
+    '4. close': string;
+    '5. volume': string;
+  }
+>;

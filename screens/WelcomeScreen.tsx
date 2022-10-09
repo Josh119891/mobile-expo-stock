@@ -10,9 +10,9 @@ import { RootStackScreenProps, Stock } from '../types';
 // @ts-ignore
 import { ALGOLIA_AID, ALGOLIA_KEY, ALGOLIA_INDEX } from '@env';
 import { db } from '../database/firebase';
-import Navigation from '../navigation';
-import { AppContext } from '../App';
+import { AppContext } from '../context';
 import { mockStocks } from '../constants/mock';
+import { useIsFocused } from '@react-navigation/native';
 const client = algoliasearch(ALGOLIA_AID, ALGOLIA_KEY);
 const index = client.initIndex(ALGOLIA_INDEX);
 
@@ -22,12 +22,13 @@ const WelcomeScreen = ({ route, navigation }: RootStackScreenProps<'Welcome'>) =
   const [list, setList] = useState<Stock[]>([]);
   const [current, setCurrent] = useState<Stock[]>([]);
   const [{ uid }] = useContext(AppContext);
+  const docRef = db.collection('users').doc(uid);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     if (!uid) {
       navigation.navigate('Register');
     }
-    const docRef = db.collection('users').doc(uid);
 
     (async () => {
       // 如果该用户已经有关注的股票，在这里读取并写入list
@@ -38,7 +39,7 @@ const WelcomeScreen = ({ route, navigation }: RootStackScreenProps<'Welcome'>) =
         setCurrent(temp as Stock[]);
       }
     })();
-  }, []);
+  }, [isFocused]);
 
   useEffect(() => {
     if (!searchText.length) {
@@ -58,7 +59,7 @@ const WelcomeScreen = ({ route, navigation }: RootStackScreenProps<'Welcome'>) =
 
       setCurrent(stocks);
     });
-  }, [searchText]);
+  }, [isFocused, searchText]);
 
   const onSubmit = async () => {
     try {
