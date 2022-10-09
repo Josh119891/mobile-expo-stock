@@ -2,19 +2,20 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 import { RootTabScreenProps, QuoteStock, QuoteResponse, Stock } from '../types';
 import { SimpleLineIcons, AntDesign, Feather } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import SeeAllBtn from '../components/SeeAllBtn';
 import StockCard from '../components/StockCard';
 import { db } from '../database/firebase';
 import { quoteEndpoint } from '../utils/services';
 import { formatNum, getColor } from '../utils/numberic';
 import { pick } from '../utils/pick';
+import { AppContext } from '../App';
 
 const STORE_KEYS = ['follow', 'title', 'uri', 'symbol'];
 export default function TabOneScreen({ navigation, route }: RootTabScreenProps<'TabOne'>) {
   const [watchlist, setWatchlist] = useState<Array<QuoteStock>>([]);
   const [stocks, setStocks] = useState<Array<QuoteStock>>([]);
-  const uid = route?.params?.uid || 'I3A20k33Lgdj6KdeCHYZCUkW9Pj2';
+  const [{ uid }] = useContext(AppContext);
   const docRef = db.collection('users').doc(uid);
 
   const unfollow = async (symbol: string) => {
@@ -60,7 +61,7 @@ export default function TabOneScreen({ navigation, route }: RootTabScreenProps<'
       <View style={[styles.separator, { backgroundColor: '#eee' }]} />
       <View style={[styles.row, { paddingHorizontal: 20 }]}>
         <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Your watchlist</Text>
-        <SeeAllBtn onPress={() => navigation.navigate('Welcome', { uid })} />
+        <SeeAllBtn onPress={() => navigation.navigate('Welcome')} />
       </View>
       <View>
         {watchlist.map((i, index) => (

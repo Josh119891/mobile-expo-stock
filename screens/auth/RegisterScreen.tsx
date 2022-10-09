@@ -34,7 +34,7 @@ const RegisterScreen = ({ navigation }: RootStackScreenProps<'Register'>) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
-        navigation.navigate('Welcome', { uid: currentUser.uid });
+        navigation.navigate('Welcome');
       }
     });
     return unsubscribe;

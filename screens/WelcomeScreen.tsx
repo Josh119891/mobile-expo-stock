@@ -12,6 +12,7 @@ import { ALGOLIA_AID, ALGOLIA_KEY, ALGOLIA_INDEX } from '@env';
 import { db } from '../database/firebase';
 import Navigation from '../navigation';
 import { AppContext } from '../App';
+import { mockStocks } from '../constants/mock';
 const client = algoliasearch(ALGOLIA_AID, ALGOLIA_KEY);
 const index = client.initIndex(ALGOLIA_INDEX);
 
@@ -19,35 +20,43 @@ const WelcomeScreen = ({ route, navigation }: RootStackScreenProps<'Welcome'>) =
   const [showBoard, setShowBoard] = useState(true);
   const [searchText, setSearchText] = useState('');
   const [list, setList] = useState<Stock[]>([]);
-  const [temp, setTemp] = useState<Stock[]>([]);
+  const [current, setCurrent] = useState<Stock[]>([]);
+  const [{ uid }] = useContext(AppContext);
 
-  const docRef = db.collection('users').doc(uid);
-  const [state] = useContext(AppContext);
   useEffect(() => {
+    if (!uid) {
+      navigation.navigate('Register');
+    }
+    const docRef = db.collection('users').doc(uid);
+
     (async () => {
       // 如果该用户已经有关注的股票，在这里读取并写入list
       const doc = await docRef.get();
       if (doc.exists && doc.data()) {
-        setList(doc.data()?.stocks as Stock[]);
-        setTemp(doc.data()?.stocks as Stock[]);
+        let temp = doc.data()?.stocks || mockStocks;
+        setList(temp as Stock[]);
+        setCurrent(temp as Stock[]);
       }
     })();
   }, []);
 
   useEffect(() => {
     if (!searchText.length) {
-      setTemp(list);
+      setCurrent(list);
       return;
     }
     index.search(searchText).then(({ hits }) => {
-      const stocks = [];
-      for (let hit of hits) {
-        for (let item of temp) {
-          if (item.title === (hit as any).title) stocks.push(item);
+      const stocks = hits.map((i: any) => pick(i, ['symbol', 'title', 'uri'])) as Stock[];
+
+      for (let i = 0; i < stocks.length; i++) {
+        for (let item of list) {
+          if (item.title === stocks[i].title) {
+            stocks[i].follow = item.follow;
+          }
         }
       }
 
-      setTemp(stocks);
+      setCurrent(stocks);
     });
   }, [searchText]);
 
@@ -55,15 +64,16 @@ const WelcomeScreen = ({ route, navigation }: RootStackScreenProps<'Welcome'>) =
     try {
       // 把当前页面的更改，写入list里面，在一次更新到线上
       const stocks = [...list];
-      for (let changed of temp) {
+      for (let change of current) {
         for (let i = 0; i < stocks.length; i++) {
-          if (stocks[i].title === changed.title) {
-            stocks[i] = { ...stocks[i], follow: changed.follow };
+          if (stocks[i].title === change.title) {
+            stocks[i] = { ...stocks[i], follow: change.follow };
           }
         }
       }
-      await docRef.set({ stocks });
-      navigation.navigate('Root', { params: { uid }, screen: 'TabOne' });
+      await db.collection('users').doc(uid).set({ stocks });
+
+      navigation.navigate('Root');
     } catch (error: any) {
       alert(error.message);
       console.log(error.message);
@@ -95,16 +105,16 @@ const WelcomeScreen = ({ route, navigation }: RootStackScreenProps<'Welcome'>) =
     <SafeAreaView style={styles.container}>
       {showBoard ? <Board /> : null}
       <View style={styles.cardGrid}>
-        {temp.map((item, index) => {
+        {current.map((item, index) => {
           return (
             <View key={item.symbol} style={styles.card}>
               <RoundIcon source={{ uri: item.uri }} />
               <Text style={{ fontWeight: 'bold' }}> {item.title}</Text>
               <Pressable
                 onPress={() => {
-                  const newTemp = [...temp];
-                  newTemp[index] = { ...item, follow: !item.follow };
-                  setTemp(newTemp);
+                  const newcurrent = [...current];
+                  newcurrent[index] = { ...item, follow: !item.follow };
+                  setCurrent(newcurrent);
                 }}
                 style={item.follow ? styles.followBtn : styles.unfollowBtn}
               >
