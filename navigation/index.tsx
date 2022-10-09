@@ -31,7 +31,10 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
     </NavigationContainer>
   );
 }
-
+// TODO PRESS IMPROVMENT
+// style={({ pressed }) => ({
+//   opacity: pressed ? 0.5 : 1,
+// })}
 /**
  * A root stack navigator is often used for displaying modals on top of all other content.
  * https://reactnavigation.org/docs/modal
@@ -74,28 +77,12 @@ function BottomTabNavigator() {
       <BottomTab.Screen
         name="TabOne"
         component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate('Modal')}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}
-            >
-              <FontAwesome name="info-circle" size={25} color={Colors[colorScheme].text} style={{ marginRight: 15 }} />
-            </Pressable>
-          ),
-        })}
+        options={{ tabBarLabel: 'Dashboard', headerShown: false, tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} /> }}
       />
       <BottomTab.Screen
         name="TabTwo"
         component={TabTwoScreen}
-        options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
+        options={{ tabBarLabel: 'Portfolio', headerShown: false, tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} /> }}
       />
     </BottomTab.Navigator>
   );

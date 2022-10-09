@@ -10,7 +10,6 @@ import { RootStackScreenProps, Stock } from '../types';
 // @ts-ignore
 import { ALGOLIA_AID, ALGOLIA_KEY, ALGOLIA_INDEX } from '@env';
 import { db } from '../database/firebase';
-import { stocks } from '../database/mock';
 const client = algoliasearch(ALGOLIA_AID, ALGOLIA_KEY);
 const index = client.initIndex(ALGOLIA_INDEX);
 

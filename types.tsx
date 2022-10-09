@@ -36,7 +36,6 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
 >;
 
 export interface Stock {
-  objectID: string;
   title: string;
   symbol: string;
   uri: string;

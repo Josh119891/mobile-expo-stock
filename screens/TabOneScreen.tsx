@@ -5,12 +5,27 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useEffect, useState } from 'react';
 // import { quoteEndpoint } from '../services';
 import SeeAllBtn from '../components/SeeAllBtn';
+import StockCard from '../components/StockCard';
+import { db } from '../database/firebase';
 
 export default function TabOneScreen({ navigation, route }: RootTabScreenProps<'TabOne'>) {
   const [watchlist, setWatchlist] = useState<Stock[]>([]);
-  // const { uid } = route.params;
-  useEffect(() => {}, []);
+  const [stocks, setStocks] = useState<Stock[]>([]);
+  const uid = route?.params?.uid || 'I3A20k33Lgdj6KdeCHYZCUkW9Pj2';
+  const docRef = db.collection('users').doc(uid);
 
+  useEffect(() => {
+    const init = async () => {
+      const doc = await docRef.get();
+      if (doc.exists && doc.data()) {
+        const storeData = (doc.data()?.stocks || []) as Stock[];
+
+        setStocks(storeData);
+        setWatchlist(storeData.filter((i) => i.follow));
+      }
+    };
+    init();
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topCard}>
@@ -23,8 +38,8 @@ export default function TabOneScreen({ navigation, route }: RootTabScreenProps<'
         <SeeAllBtn />
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-around' }}>
-        {/* <StockCard data={left} title={"Tesla"} img={"TESLA_IMG"} />
-          <StockCard data={right} title={"GameStop"} img={"GMST_IMG"} /> */}
+        <StockCard stock={stocks.find((i) => i.title === 'Tesla') as Stock} />
+        <StockCard stock={stocks.find((i) => i.title === 'GameStop') as Stock} />
       </View>
       <View style={[styles.separator, { backgroundColor: '#eee' }]} />
       <View style={[styles.row, { paddingHorizontal: 20 }]}>
