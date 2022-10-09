@@ -25,7 +25,6 @@ const RegisterScreen = ({ navigation }: RootStackScreenProps<'Register'>) => {
       const phoneProvider = new PhoneAuthProvider(auth);
       const verificationId = await phoneProvider.verifyPhoneNumber(phone, recaptchaVerifier.current);
       setVerificationId(verificationId);
-      console.log(verificationId);
       //NAVIGATE
       navigation.navigate('Otp', { TITLE, MAIN_BTN: 'Register', verificationId });
     } catch (error: any) {
@@ -35,7 +34,6 @@ const RegisterScreen = ({ navigation }: RootStackScreenProps<'Register'>) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
-        console.log(JSON.stringify(currentUser, null, 2));
         navigation.navigate('Welcome', { uid: currentUser.uid });
       }
     });

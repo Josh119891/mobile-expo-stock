@@ -46,7 +46,6 @@ const WelcomeScreen = ({ route }: RootStackScreenProps<'Welcome'>) => {
           if (item.title === (hit as any).title) stocks.push(item);
         }
       }
-      console.log(searchText, stocks);
 
       setTemp(stocks);
     });
@@ -95,22 +94,24 @@ const WelcomeScreen = ({ route }: RootStackScreenProps<'Welcome'>) => {
     <SafeAreaView style={styles.container}>
       {showBoard ? <Board /> : null}
       <View style={styles.cardGrid}>
-        {temp.map((item, index) => (
-          <View key={item.objectID} style={styles.card}>
-            <RoundIcon source={{ uri: item.uri }} />
-            <Text style={{ fontWeight: 'bold' }}> {item.title}</Text>
-            <Pressable
-              onPress={() => {
-                const newTemp = [...temp];
-                newTemp[index] = { ...item, follow: !item.follow };
-                setTemp(newTemp);
-              }}
-              style={item.follow ? styles.followBtn : styles.unfollowBtn}
-            >
-              <Text style={item.follow ? styles.followText : styles.unfollowText}>follow</Text>
-            </Pressable>
-          </View>
-        ))}
+        {temp.map((item, index) => {
+          return (
+            <View key={item.symbol} style={styles.card}>
+              <RoundIcon source={{ uri: item.uri }} />
+              <Text style={{ fontWeight: 'bold' }}> {item.title}</Text>
+              <Pressable
+                onPress={() => {
+                  const newTemp = [...temp];
+                  newTemp[index] = { ...item, follow: !item.follow };
+                  setTemp(newTemp);
+                }}
+                style={item.follow ? styles.followBtn : styles.unfollowBtn}
+              >
+                <Text style={item.follow ? styles.followText : styles.unfollowText}>follow</Text>
+              </Pressable>
+            </View>
+          );
+        })}
       </View>
       <View style={styles.submitView}>
         <Pressable onPress={onSubmit} style={styles.submitBtn}>
