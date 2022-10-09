@@ -1,9 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import { View, KeyboardAvoidingView, TextInput, Text, Platform, TouchableWithoutFeedback, Button, Keyboard, Pressable } from 'react-native';
 import { styles } from './shared';
 import { RootStackScreenProps } from '../../types';
 import { PhoneAuthProvider, signInWithCredential } from 'firebase/auth';
 import { auth } from '../../database/firebase';
+import { AppContext } from '../../App';
 
 const CONSTANTS = {
   INPUT_TEXT: 'Enter OTP',
@@ -15,12 +16,15 @@ const OtpScreen = ({ navigation, route }: RootStackScreenProps<'Otp'>) => {
   const [code, setCode] = useState('');
   const { TITLE, MAIN_BTN, verificationId, confirmationResult } = route.params;
   const { INPUT_TEXT, HELPER_BTN, HELPER_TEXT } = CONSTANTS;
+  const [state, dispatch] = useContext(AppContext);
   const onRegister = async () => {
     try {
       const credential = PhoneAuthProvider.credential(verificationId, code);
       const { user } = await signInWithCredential(auth, credential);
+      console.log(user);
       // pass uid into Welcome screen
-      navigation.navigate('Welcome', { uid: (user as any).id });
+      dispatch({ type: 'set', payload: { uid: (user as any).uid } });
+      navigation.navigate('Welcome');
     } catch (error: any) {
       alert(error.message);
     }
@@ -29,7 +33,9 @@ const OtpScreen = ({ navigation, route }: RootStackScreenProps<'Otp'>) => {
     try {
       const { user } = await confirmationResult.confirm(code);
       // pass uid into TabOne screen
-      navigation.navigate('Root', { screen: 'TabOne', params: { uid: user.uid } });
+      dispatch({ type: 'set', payload: { uid: (user as any).uid } });
+
+      navigation.navigate('Root');
     } catch (error: any) {
       alert(error.message);
     }

@@ -20,13 +20,14 @@ export type RootStackParamList = {
   Register: undefined;
   Login: undefined;
   Otp: OtpParams;
-  Welcome: { uid: string };
+  Welcome: undefined;
+  StockChart: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<RootStackParamList, Screen>;
 
 export type RootTabParamList = {
-  TabOne: { uid: string }; // 用于获取当前用户的数据信息
+  TabOne: undefined;
   TabTwo: undefined;
 };
 
@@ -69,5 +70,4 @@ export type QuoteStock = QuoteObject & Stock;
 
 export interface StateType {
   uid?: string;
-  chartSymbol?: string;
 }

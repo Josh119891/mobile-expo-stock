@@ -1,5 +1,5 @@
 import { SafeAreaView, StyleSheet, View, Text, TextInput, Pressable } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Entypo, SimpleLineIcons } from '@expo/vector-icons';
 import { ScreenTitle } from '../components/StyledText';
 import { RoundIcon } from '../components/StyledImage';
@@ -11,6 +11,7 @@ import { RootStackScreenProps, Stock } from '../types';
 import { ALGOLIA_AID, ALGOLIA_KEY, ALGOLIA_INDEX } from '@env';
 import { db } from '../database/firebase';
 import Navigation from '../navigation';
+import { AppContext } from '../App';
 const client = algoliasearch(ALGOLIA_AID, ALGOLIA_KEY);
 const index = client.initIndex(ALGOLIA_INDEX);
 
@@ -19,13 +20,12 @@ const WelcomeScreen = ({ route, navigation }: RootStackScreenProps<'Welcome'>) =
   const [searchText, setSearchText] = useState('');
   const [list, setList] = useState<Stock[]>([]);
   const [temp, setTemp] = useState<Stock[]>([]);
-  const { uid } = route.params;
-  const docRef = db.collection('users').doc(uid);
 
+  const docRef = db.collection('users').doc(uid);
+  const [state] = useContext(AppContext);
   useEffect(() => {
     (async () => {
       // 如果该用户已经有关注的股票，在这里读取并写入list
-
       const doc = await docRef.get();
       if (doc.exists && doc.data()) {
         setList(doc.data()?.stocks as Stock[]);

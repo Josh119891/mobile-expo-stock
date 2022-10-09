@@ -44,7 +44,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator initialRouteName="StockChart">
+    <Stack.Navigator initialRouteName="Register">
       <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Register" component={RegisterScreen} options={authOptions} />
       <Stack.Screen name="Login" component={LoginScreen} options={authOptions} />

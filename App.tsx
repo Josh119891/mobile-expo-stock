@@ -8,7 +8,7 @@ import { useReducer, useContext, createContext } from 'react';
 import { StateType } from './types';
 
 export const AppContext = createContext<any>({});
-function reducer(state: StateType, action: { payload: StateType }) {
+function reducer(state: StateType, action: { type: string; payload: StateType }) {
   switch (action.type) {
     case 'set':
       return { ...state, ...action.payload };
